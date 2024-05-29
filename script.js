@@ -3,7 +3,7 @@ let resetBtn = document.querySelector("#reset-btn");
 let newGameBtn = document.querySelector("#new-btn");
 let msgConatiner = document.querySelector(".msg-container");
 let message = document.querySelector("#msg");
-
+let count = 0;
 let turnO = true;//playerX, playerO
 
 //using 2D arrays to store all winning patterns
@@ -22,13 +22,33 @@ boxes.forEach((box)=>{
             turnO = true;
         }
         box.disabled = true;
+        count++;
         checkWinner();
     });
 });
-
+const resetGame = ()=>{
+    turnO = true;
+    enableBoxes();
+    msgConatiner.classList.add("hide");
+    count = 0;
+}
+const disableBoxes = ()=>{
+    for(let box of boxes)
+        {
+            box.disabled = true;
+        }
+}
+const enableBoxes = ()=>{
+    for(let box of boxes)
+        {
+            box.disabled = false;
+            box.innerText = "";
+        }
+}
 const showWinner = (Winner)=>{
     message.innerText = `Winner is ${Winner}`;
     msgConatiner.classList.remove("hide");
+    disableBoxes();
 }
 const checkWinner = ()=>{
     for(let pattern of winpatterns)
@@ -44,6 +64,18 @@ const checkWinner = ()=>{
                             console.log("Winner",pos1Val);
                             showWinner(pos1Val);
                         }
+                    else{
+                        if(count === 9)
+                            {
+                                message.innerText = "Game is draw";
+                                msgConatiner.classList.remove("hide");
+                                disableBoxes();
+                            }
+                    }
                 }
         }
-}
+    
+};
+
+newGameBtn.addEventListener("click",resetGame);
+resetBtn.addEventListener("click",resetGame);
